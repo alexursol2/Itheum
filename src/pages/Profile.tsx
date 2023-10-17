@@ -8,9 +8,15 @@ import { logout } from '@multiversx/sdk-dapp/utils';
 import Loading from './Loading';
 import RadarChart from 'components/RadarChart';
 import { useGetAccount } from '@multiversx/sdk-dapp/hooks/account/useGetAccount';
-import { SftMinter } from '@itheum/sdk-mx-data-nft';
-import { Address, Transaction } from '@multiversx/sdk-core';
-import { UserSigner } from "@multiversx/sdk-wallet";
+import { SftMinter } from "@itheum/sdk-mx-data-nft";
+
+// Itheum SDK Minter initialization
+const dataNftMinter = new SftMinter("devnet"); // or "mainnet"
+
+// MultiversX Imports (need to interact with the Blockchain)
+import { Address, Transaction } from "@multiversx/sdk-core/out";
+import { sendTransactions } from "@multiversx/sdk-dapp/services";
+import { refreshAccount } from "@multiversx/sdk-dapp/utils/account";
 
 
 export default function Profile() {
@@ -47,35 +53,38 @@ export default function Profile() {
     }
 
     async function mintWithItheum() {
-        const minter = new SftMinter("devnet")
-        const walletObject = minter.mint(
-            new Address(address),
-            'DeFi',
-            'https://api.itheumcloud-stg.com/datamarshalapi/router/v1',
-            'https://api.npoint.io/3ecfc9897cf64f09401b',
-            'https://api.npoint.io/3ecfc9897cf64f09401b',
-            0,
-            1,
-            'Test Title',
-            'Test Description',
-            1,
-            {
-                nftStorageToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEI1QjQ0MjZFMmRjOURBZUFiZjM4RjNBMDZBMzZiNTNGNzUwMTY5MTgiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY5NzM3MzA1OTk1NiwibmFtZSI6ImhhY2thdGhvbiJ9.EVtqRKYFdRbm7YLxn_FSDtKzP-PTLL2VvdWvsqsGFFE'
-            }
-        );
-        let signer = UserSigner.fromWallet(walletObject, "password");
-        const transaction = new Transaction({
-            gasLimit: 50000,
-            gasPrice: 0,
-            sender: new Address(address),
-            receiver: new Address(address),
-            chainID: "D",
-            version: 1
-        });
+        try {
+            const mintTransaction: Transaction = await dataNftMinter.mint(
+                new Address(address),
+                'DeFi',
+                'https://api.itheumcloud-stg.com/datamarshalapi/router/v1',
+                'https://api.npoint.io/3ecfc9897cf64f09401b',
+                'https://api.npoint.io/3ecfc9897cf64f09401b',
+                0,
+                1,
+                'Test Title',
+                'Test Description',
+                1,
+                {
+                    nftStorageToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEI1QjQ0MjZFMmRjOURBZUFiZjM4RjNBMDZBMzZiNTNGNzUwMTY5MTgiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY5NzM3MzA1OTk1NiwibmFtZSI6ImhhY2thdGhvbiJ9.EVtqRKYFdRbm7YLxn_FSDtKzP-PTLL2VvdWvsqsGFFE'
+                }
+            );
         
-        const serializedTransaction = transaction.serializeForSigning();
-        const transactionSignature = await signer.sign(serializedTransaction);
-        transaction.applySignature(transactionSignature);
+            await refreshAccount();
+        
+            const { sessionId, error } = await sendTransactions({
+                transactions: mintTransaction,
+                transactionsDisplayInfo: {
+                processingMessage: "Minting Standard Data NFT",
+                errorMessage: "Data NFT minting error",
+                successMessage: "Data NFT minted successfully",
+                },
+                redirectAfterSign: false,
+            });
+        } catch(e) {
+            console.log("Minting Standard Data NFT FAILED");
+            console.error(e);
+        }
     }
 
     function generateXUrl() {

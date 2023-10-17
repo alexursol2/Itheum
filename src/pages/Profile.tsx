@@ -9,10 +9,6 @@ import Loading from './Loading';
 import RadarChart from 'components/RadarChart';
 import { useGetAccount } from '@multiversx/sdk-dapp/hooks/account/useGetAccount';
 import { SftMinter } from "@itheum/sdk-mx-data-nft";
-
-// Itheum SDK Minter initialization
-const dataNftMinter = new SftMinter("devnet"); // or "mainnet"
-
 // MultiversX Imports (need to interact with the Blockchain)
 import { Address, Transaction } from "@multiversx/sdk-core/out";
 import { sendTransactions } from "@multiversx/sdk-dapp/services";
@@ -54,7 +50,9 @@ export default function Profile() {
 
     async function mintWithItheum() {
         try {
-            const mintTransaction: Transaction = await dataNftMinter.mint(
+            // Itheum SDK Minter initialization
+            const sftMinter = new SftMinter("devnet"); // or "mainnet"
+            const mintTx = sftMinter.mint(
                 new Address(address),
                 'DeFi',
                 'https://api.itheumcloud-stg.com/datamarshalapi/router/v1',
@@ -73,7 +71,7 @@ export default function Profile() {
             await refreshAccount();
         
             const { sessionId, error } = await sendTransactions({
-                transactions: mintTransaction,
+                transactions: mintTx,
                 transactionsDisplayInfo: {
                 processingMessage: "Minting Standard Data NFT",
                 errorMessage: "Data NFT minting error",

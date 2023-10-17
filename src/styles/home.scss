@@ -1,0 +1,38 @@
+@import 'variables.scss';
+
+#body-container.home {
+    min-height: calc(100vh - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .center-container {
+        padding: 25px;
+        width: 65%;
+        max-width: 600px;
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+
+        h1 {
+            color: $color-text;
+            font-size: 50px;
+
+            @media (min-width: 650px) {
+                span {
+                    white-space: nowrap;
+                }
+            }
+        }
+
+        .description {
+            a {
+                color: $color-text;
+            }
+        }
+
+        .button {
+            margin-top: 20px;
+        }
+    }
+}

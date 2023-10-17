@@ -1,0 +1,171 @@
+@import 'variables.scss';
+
+@mixin visible-container {
+    background-color: $color-background-1;
+    border-radius: 8px;
+    border: 3px solid $color-background-1;
+}
+
+@mixin text-safe {
+    padding: 8px;
+}
+
+@mixin clickable-container {
+    @include visible-container;
+    @include text-safe;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    border: 3px solid $color-background-2;
+    cursor: pointer;
+    transition: border-color 0.2s ease-in-out;
+
+    &:hover {
+        border-color: $color-text;
+    }
+
+    span {}
+
+    .svg {
+        div {
+            display: flex;
+        }
+    }
+}
+
+#body-container.profile {
+    min-height: calc(100vh - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: 20px;
+    padding-bottom: 70px;
+
+    .center-container {
+        max-width: 80%;
+        display: grid;
+        grid-template-areas: "profile-picture title"
+            "profile-picture address"
+            "profile-picture datas"
+            "share-on-x datas";
+        grid-template-rows: auto auto auto 1fr;
+        grid-gap: 20px 4%;
+
+        @media (max-width: 800px) {
+            grid-template-areas: "profile-picture title"
+                "profile-picture address"
+                "profile-picture share-on-x"
+                "datas datas";
+            grid-template-rows: auto 1fr auto auto;
+            grid-gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            grid-gap: 14px;
+        }
+
+        h1 {
+            grid-area: title;
+        }
+
+        .address {
+            grid-area: address;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-picture {
+            grid-area: profile-picture;
+            @include visible-container;
+            overflow: hidden;
+            aspect-ratio: 1;
+            max-width: 40vh;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .share-on-x {
+            grid-area: share-on-x;
+            @include clickable-container;
+            display: block;
+            text-decoration: none;
+            margin-bottom: auto;
+        }
+
+        .datas {
+            grid-area: datas;
+            margin-top: auto;
+
+            .tags {
+                display: flex;
+                justify-content: space-between;
+                gap: 20px;
+
+                @media (max-width: 800px) {
+                    margin-top: 25px;
+                }
+
+                @media (max-width: 600px) {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    grid-gap: 14px;
+                }
+
+                .tag {
+                    @include visible-container;
+                    @include text-safe;
+                    aspect-ratio: 1;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-evenly;
+                    align-items: center;
+
+                    .plus {
+                        font-size: 2vw;
+
+                        @media (max-width: 800px) {
+                            font-size: 24px;
+                        }
+                    }
+
+                    .title {
+                        font-size: 2.2vw;
+
+                        @media (max-width: 800px) {
+                            font-size: 22px;
+                        }
+                    }
+                }
+            }
+
+            .radar-tags {
+                @include visible-container;
+            }
+
+            .itheum {
+                margin-bottom: 20px;
+                @include clickable-container;
+                border-color: #a9bfdd;
+                background: linear-gradient(135deg, #182167, #592090);
+
+                svg {
+                    height: 1.2rem;
+                }
+            }
+        }
+    }
+
+    .get-new {
+        position: fixed;
+        left: 15px;
+        bottom: 15px;
+        @include clickable-container;
+    }
+}

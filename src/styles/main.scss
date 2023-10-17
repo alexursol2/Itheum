@@ -1,0 +1,54 @@
+@import 'variables.scss';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $color-background-3;
+  color: $color-text;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+h1 + p,
+h2 + p,
+h3 + p,
+h4 + p,
+h5 + p,
+h6 + p {
+  margin-top: 1rem;
+}
+
+p + p {
+  margin-top: 0.6rem;
+}
+
+a {
+  color: $color-text;
+}
+
+p a {
+  &:hover {
+    text-shadow: 0 0 4px #ffffff21;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+  }
+}

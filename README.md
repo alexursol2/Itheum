@@ -12,7 +12,7 @@ First, install the required modules,
 npm install
 ```
 
-Then start the live server
+Then start the live server here
 ```
 npm run start
 ```

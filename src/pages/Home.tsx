@@ -1,37 +1,16 @@
-import React, { useEffect } from 'react';
-import { useGetAccount } from '@multiversx/sdk-dapp/hooks/account';
-import { useWebWalletLogin } from '@multiversx/sdk-dapp/hooks/login/useWebWalletLogin';
-import Button from 'components/Button';
-import '../styles/home.scss';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { MinterTransaction } from "./MinterTransaction";
 
-export default function Home() {
-  const [initiateLogin] = useWebWalletLogin({ callbackRoute: "/" });
-
-  const { address } = useGetAccount();
-  
-  const isConnected = address != "";
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isConnected) {
-      navigate('/profile');
-    }
-  }, [isConnected]);
-
-  function connectWallet() {
-    initiateLogin();
-  }
-
+export const Home: React.FC = () => {
   return (
-    <div id='body-container' className='home'>
-      <div className="center-container">
-        <h1>Discover Your <span>MultiversX Profile</span></h1>
-        <p className="description">TKYC (Truly Know Your Customer) is a cutting-edge on-chain analysis solution leveraging artificial intelligence for wallet clustering. In other words, with just a public wallet address, we can determine the type of user it belongs.</p>
-        <p><a href="#" className="more-information">Click for more information about TKYC and all the potential of this project</a></p>
-        <Button className='button' onClick={connectWallet}>Connect my wallet</Button>
-      </div>
+    <div className="flex flex-col justify-center items-center w-full tracking-wide ">
+      <span className="text-5xl leading-relaxed">
+        This a <b className="uppercase text-blue-400">TEMPLATE</b> that has everything that is needed to start building on&nbsp;
+        <b className="uppercase text-purple-500">Itheum</b>
+      </span>
+
+      <span className="mr-4">After connecting your wallet you can try the mint button</span>
+      <MinterTransaction></MinterTransaction>
     </div>
   );
-}
+};
